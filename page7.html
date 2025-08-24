@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uranus - Solar System</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background: rgba(10, 10, 30, 0.95);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    nav .logo {
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700, 0 0 20px #ffec8b;
+      transition: opacity 0.3s ease;
+    }
+    nav ul { list-style: none; display: flex; }
+    nav ul li { position: relative; }
+    nav ul li a {
+      display: block;
+      padding: 10px 15px;
+      color: #f1f1f1;
+      text-decoration: none;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+    nav ul li a:hover {
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700;
+    }
+
+    /* Dropdown (desktop) */
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: rgba(20, 20, 50, 0.95);
+      min-width: 160px;
+      flex-direction: column;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+    @media (min-width: 769px) {
+      nav ul li:hover > ul { display: flex; }
+    }
+
+    /* Mobile Nav */
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      cursor: pointer;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      nav { flex-wrap: wrap; }
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(10, 10, 30, 0.95);
+      }
+      nav ul.show { display: flex; }
+      nav ul li { text-align: center; width: 100%; border-top: 1px solid rgba(255,255,255,0.15); }
+      nav ul li:first-child { border-top: none; }
+
+      nav ul li a { padding: 16px; font-weight: 600; }
+      nav ul li ul {
+        position: static;
+        display: none;
+        width: 100%;
+        background: rgba(20, 20, 50, 0.95);
+        border-radius: 0;
+        box-shadow: none;
+      }
+      nav ul li.open > ul { display: flex; flex-direction: column; }
+      nav ul li ul li a { padding: 14px 25px; text-align: left; }
+      .menu-toggle { display: block; }
+
+      /* Hide logo when menu is open */
+      nav.open .logo { opacity: 0; pointer-events: none; }
+    }
+
+    /* Header */
+    header {
+      height: auto;
+      padding: 80px 20px;
+      background: url('https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/360_F_370356524_7x9V1bkGksKyTJzskUVbxIv81KVx2yT0.jpg') repeat center center;
+      background-size: contain;
+      text-align: center;
+      color: white;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #fff, 0 0 20px #ffd700;
+    }
+    header img {
+      max-width: 320px;
+      margin: 20px auto;
+      display: block;
+    }
+    header p {
+      max-width: 700px;
+      margin: 20px auto;
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    /* Sections */
+    section {
+      padding: 60px 20px;
+      text-align: center;
+      background: url('https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/360_F_370356524_7x9V1bkGksKyTJzskUVbxIv81KVx2yT0.jpg') repeat center center;
+      background-size: contain;
+    }
+    section h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #fff, 0 0 20px #ffd700;
+    }
+    section p {
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 20px;
+      width: 280px;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: 0.3s;
+    }
+    .card:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); }
+    .card h3 { color: #ffd700; margin-bottom: 10px; }
+    .card p { font-size: 0.95em; }
+
+    /* Footer */
+    footer {
+      background: rgba(10, 10, 30, 0.95);
+      color: #ddd;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    footer a { color: #ffd700; text-decoration: none; font-weight: 500; }
+    footer a:hover { text-shadow: 0 0 5px #ffd700; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">Solar System</div>
+    <div class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li>
+        <a href="#">Planets ▼</a>
+        <ul>
+          <li><a href="page1.html">Mercury</a></li>
+          <li><a href="page2.html">Venus</a></li>
+          <li><a href="page3.html">Earth</a></li>
+          <li><a href="page4.html">Mars</a></li>
+          <li><a href="page5.html">Jupiter</a></li>
+          <li><a href="page6.html">Saturn</a></li>
+          <li><a href="page7.html">Uranus</a></li>
+          <li><a href="page8.html">Neptune</a></li>
+        </ul>
+      </li>
+      <li><a href="page9.html">Moons</a></li>
+      <li><a href="page10.html">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h1>Uranus</h1>
+    <img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/cartoon-uranus-planet-vector-illustration-260nw-1047836245-removebg-preview.png" alt="Uranus">
+    <p>Uranus is the seventh planet from the Sun and is known for its unusual tilt of 98 degrees, making it appear to roll around the Sun on its side. It is an ice giant with a pale blue color caused by methane in its atmosphere.</p>
+  </header>
+
+  <!-- Section: Quick Facts -->
+  <section>
+    <h2>Quick Facts</h2>
+    <div class="cards">
+      <div class="card"><h3>Distance from Sun</h3><p>2.87 billion km (1.78 billion miles)</p></div>
+      <div class="card"><h3>Orbital Period</h3><p>84 Earth years</p></div>
+      <div class="card"><h3>Moons</h3><p>27 (including Titania, Oberon, Umbriel, Ariel, Miranda)</p></div>
+      <div class="card"><h3>Surface Temperature</h3><p>-224°C (average)</p></div>
+      <div class="card"><h3>Diameter</h3><p>50,724 km</p></div>
+    </div>
+  </section>
+
+  <!-- Section: About Uranus -->
+  <section>
+    <h2>About Uranus</h2>
+    <p>Uranus is an ice giant composed mainly of hydrogen, helium, and water, methane, and ammonia ices. Its sideways rotation makes its seasons last over 20 years each. Uranus also has a faint system of rings and is one of the coldest planets in the solar system.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made by Rohan Bangera</p>
+    <p>View the source code on <a href="#">GitHub</a></p>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('nav ul');
+    const nav = document.querySelector('nav');
+
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('show');
+      nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', menu.classList.contains('show'));
+    });
+
+    // Mobile dropdown toggle
+    document.querySelectorAll('nav ul li > a').forEach(link => {
+      const parent = link.parentElement;
+      const submenu = parent.querySelector('ul');
+      if (!submenu) return;
+      link.addEventListener('click', e => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          parent.classList.toggle('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
