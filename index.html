@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar System</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background: rgba(10, 10, 30, 0.95);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    nav .logo {
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700, 0 0 20px #ffec8b;
+      transition: opacity 0.3s ease;
+    }
+    nav ul { list-style: none; display: flex; }
+    nav ul li { position: relative; }
+    nav ul li a {
+      display: block;
+      padding: 10px 15px;
+      color: #f1f1f1;
+      text-decoration: none;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+    nav ul li a:hover {
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700;
+    }
+
+    /* Dropdown (desktop) */
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: rgba(20, 20, 50, 0.95);
+      min-width: 160px;
+      flex-direction: column;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+    @media (min-width: 769px) {
+      nav ul li:hover > ul { display: flex; }
+    }
+
+    /* Mobile Nav */
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      cursor: pointer;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      nav { flex-wrap: wrap; }
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(10, 10, 30, 0.95);
+      }
+      nav ul.show { display: flex; }
+      nav ul li { text-align: center; width: 100%; border-top: 1px solid rgba(255,255,255,0.15); }
+      nav ul li:first-child { border-top: none; }
+
+      nav ul li a { padding: 16px; font-weight: 600; }
+      nav ul li ul {
+        position: static;
+        display: none;
+        width: 100%;
+        background: rgba(20, 20, 50, 0.95);
+        border-radius: 0;
+        box-shadow: none;
+      }
+      nav ul li.open > ul { display: flex; flex-direction: column; }
+      nav ul li ul li a { padding: 14px 25px; text-align: left; }
+      .menu-toggle { display: block; }
+
+      /* Hide logo when menu is open */
+      nav.open .logo { opacity: 0; pointer-events: none; }
+    }
+
+    /* Backgrounds for sections */
+    section, header {
+      background: url('https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/360_F_370356524_7x9V1bkGksKyTJzskUVbxIv81KVx2yT0.jpg') repeat center center;
+      background-size: contain;
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    /* Header with solar system */
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #fff, 0 0 20px #ffd700;
+    }
+
+    /* Solar System */
+    .solar-system { position: relative; width: 600px; height: 600px; max-width: 90vw; max-height: 90vw; }
+    .sun {
+      width: 70px; height: 70px; background: gold; border-radius: 50%;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 40px yellow, 0 0 70px orange; z-index: 10;
+    }
+    .orbit { 
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      border: none;   /* orbit lines removed */
+      border-radius: 50%; 
+      transform: translate(-50%, -50%); 
+      animation: spin linear infinite; 
+    }
+    .planet { position: absolute; top: 50%; left: 50%; transform: translateX(var(--radius)); }
+    .planet img { border-radius: 50%; display: block; object-fit: cover; }
+
+    /* Planet sizes */
+    .orbit.mercury  .planet img { width: 28px; height: 28px; }
+    .orbit.venus    .planet img { width: 32px; height: 32px; }
+    .orbit.earth    .planet img { width: 34px; height: 34px; }
+    .orbit.mars     .planet img { width: 30px; height: 30px; }
+    .orbit.jupiter  .planet img { width: 55px; height: 55px; }
+    .orbit.saturn   .planet img { width: 50px; height: 50px; }
+    .orbit.uranus   .planet img { width: 40px; height: 40px; }
+    .orbit.neptune  .planet img { width: 38px; height: 38px; }
+
+    @keyframes spin { 
+      from { transform: translate(-50%, -50%) rotate(0deg); } 
+      to { transform: translate(-50%, -50%) rotate(360deg); } 
+    }
+
+    /* Orbit sizes */
+    .orbit.mercury { width: 90px; height: 90px; animation-duration: 5s; }
+    .orbit.venus   { width: 150px; height: 150px; animation-duration: 8s; }
+    .orbit.earth   { width: 220px; height: 220px; animation-duration: 12s; }
+    .orbit.mars    { width: 290px; height: 290px; animation-duration: 15s; }
+    .orbit.jupiter { width: 370px; height: 370px; animation-duration: 20s; }
+    .orbit.saturn  { width: 460px; height: 460px; animation-duration: 25s; }
+    .orbit.uranus  { width: 540px; height: 540px; animation-duration: 30s; }
+    .orbit.neptune { width: 620px; height: 620px; animation-duration: 35s; }
+    .orbit.mercury .planet { --radius: 45px; }
+    .orbit.venus   .planet { --radius: 75px; }
+    .orbit.earth   .planet { --radius: 110px; }
+    .orbit.mars    .planet { --radius: 145px; }
+    .orbit.jupiter .planet { --radius: 185px; }
+    .orbit.saturn  .planet { --radius: 230px; }
+    .orbit.uranus  .planet { --radius: 270px; }
+    .orbit.neptune .planet { --radius: 310px; }
+
+    /* Section Styling */
+    section h2 { font-size: 2em; margin-bottom: 20px; text-shadow: 0 0 10px #fff, 0 0 20px #ffd700; }
+    section p { max-width: 800px; margin: 0 auto 30px auto; line-height: 1.6; font-size: 1.1em; }
+    .cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 20px;
+      width: 280px;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: 0.3s;
+    }
+    .card:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); }
+    .card h3 { color: #ffd700; margin-bottom: 10px; }
+    .card p { font-size: 0.95em; }
+
+    /* Footer */
+    footer {
+      background: rgba(10, 10, 30, 0.95);
+      color: #ddd;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    footer a { color: #ffd700; text-decoration: none; font-weight: 500; }
+    footer a:hover { text-shadow: 0 0 5px #ffd700; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">Solar System</div>
+    <div class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li>
+        <a href="#">Planets ▼</a>
+        <ul>
+          <li><a href="page1.html">Mercury</a></li>
+          <li><a href="page2.html">Venus</a></li>
+          <li><a href="page3.html">Earth</a></li>
+          <li><a href="page4.html">Mars</a></li>
+          <li><a href="page5.html">Jupiter</a></li>
+          <li><a href="page6.html">Saturn</a></li>
+          <li><a href="page7.html">Uranus</a></li>
+          <li><a href="page8.html">Neptune</a></li>
+        </ul>
+      </li>
+      <li><a href="page9.html">Moons</a></li>
+      <li><a href="page10.html">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Header with Solar Animation -->
+  <header>
+    <h1>Welcome to the Solar System</h1>
+    <div class="solar-system">
+      <div class="sun"></div>
+      <div class="orbit mercury"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/cute-hand-drawn-cartoon-mercury-closest-rocky-planet-sun-solar-system-childish-doodle_649043-2452-removebg-preview.png" alt="Mercury"></div></div>
+      <div class="orbit venus"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/venus-planet-isolated-on-white-background-planet-of-solar-system-cartoon-style-illustration-for-any-design-vector-removebg-preview.png" alt="Venus"></div></div>
+      <div class="orbit earth"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/ori_3496356_8a7a869dc988c9986a92bce4f0b3fe253315fea0_cartoon-earth-planet-globe-vector-illustration-in-style-removebg-preview.png" alt="Earth"></div></div>
+      <div class="orbit mars"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/cute-hand-drawn-cartoon-mars-planet-solar-system-galaxy-childish-simple-doodle-isolated-white-astronomy-celestial-body-318983805-removebg-preview.png" alt="Mars"></div></div>
+      <div class="orbit jupiter"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/cartoon-planet-for-kids-jupiter-solar-system-vector-removebg-preview.png" alt="Jupiter"></div></div>
+      <div class="orbit saturn"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/space-saturn-planet-galaxy-solar-system-cartoon-icon-white-background-free-vector-removebg-preview.png" alt="Saturn"></div></div>
+      <div class="orbit uranus"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/cartoon-uranus-planet-vector-illustration-260nw-1047836245-removebg-preview.png" alt="Uranus"></div></div>
+      <div class="orbit neptune"><div class="planet"><img src="https://uploads.onecompiler.io/43t37fn5u/43u47rbj7/neptune-planet-isolated-on-white-background-planet-of-solar-system-cartoon-style-vector-illustration-for-any-design-2BDY92P-removebg-preview.png" alt="Neptune"></div></div>
+    </div>
+  </header>
+
+  <!-- Section 1 -->
+  <section>
+    <h2>The Planets</h2>
+    <p>Our Solar System is made up of eight planets, each unique in size, atmosphere, and composition.</p>
+    <div class="cards">
+      <div class="card"><h3>Inner Planets</h3><p>Mercury, Venus, Earth, and Mars are rocky planets with solid surfaces.</p></div>
+      <div class="card"><h3>Gas Giants</h3><p>Jupiter and Saturn are massive planets mostly made of hydrogen and helium.</p></div>
+      <div class="card"><h3>Ice Giants</h3><p>Uranus and Neptune are made of heavier elements like water, methane, and ammonia.</p></div>
+    </div>
+  </section>
+
+  <!-- Section 2 -->
+  <section>
+    <h2>The Moons</h2>
+    <p>Many planets have natural satellites, or moons, orbiting them.</p>
+    <div class="cards">
+      <div class="card"><h3>Earth’s Moon</h3><p>The Moon stabilizes Earth’s tilt and causes tides.</p></div>
+      <div class="card"><h3>Galilean Moons</h3><p>Io, Europa, Ganymede, and Callisto orbit Jupiter.</p></div>
+      <div class="card"><h3>Titan</h3><p>Saturn’s largest moon has lakes of liquid methane and a thick atmosphere.</p></div>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section>
+    <h2>About the Solar System</h2>
+    <p>The Solar System formed about 4.6 billion years ago from a cloud of gas and dust.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made by Rohan Bangera</p>
+    <p>View the source code on <a href="#">GitHub</a></p>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('nav ul');
+    const nav = document.querySelector('nav');
+
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('show');
+      nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', menu.classList.contains('show'));
+    });
+
+    // Mobile dropdown toggle
+    document.querySelectorAll('nav ul li > a').forEach(link => {
+      const parent = link.parentElement;
+      const submenu = parent.querySelector('ul');
+      if (!submenu) return;
+      link.addEventListener('click', e => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          parent.classList.toggle('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
